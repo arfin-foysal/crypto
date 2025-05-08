@@ -68,7 +68,7 @@ export default function EditContent() {
   const [editorLoading, setEditorLoading] = useState(true);
 
   // TinyMCE API key - you should use your own key in production
-  const TINY_API_KEY = 's1s4vsfs71p7es1iokxixpcgs3ml1mx3d1x7zgpawblv07sw';
+  const TINY_API_KEY = '';
 
   if (isLoadingContent) {
     return (
