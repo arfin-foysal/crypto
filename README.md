@@ -2,9 +2,9 @@
 
 A comprehensive cryptocurrency platform structured as a **monorepo** with three separate projects:
 
-* `qacent-backend`: Express.js-based backend API
-* `qacent-admin-panel`: React.js-based admin panel frontend
-* `qacent-frontend`: Next.js-based client frontend
+* `backend`: Express.js-based backend API
+* `admin-panel`: React.js-based admin panel frontend
+* `frontend`: Next.js-based client frontend
 
 This universal crypto solution includes user management, admin and client dashboards, bank account management, and transaction capabilities.
 
@@ -19,7 +19,7 @@ This universal crypto solution includes user management, admin and client dashbo
 * Role-based access control (User, Admin, SuperAdmin)
 * User profile management
 
-### 🏢 Admin Panel (`qacent-admin-panel` - React.js)
+### 🏢 Admin Panel (`admin-panel` - React.js)
 
 * React-based admin dashboard
 * Manage admin users
@@ -27,7 +27,7 @@ This universal crypto solution includes user management, admin and client dashbo
 * View platform statistics
 * Manage banks, accounts, transactions
 
-### 👨‍💼 Client Frontend (`qacent-frontend` - Next.js)
+### 👨‍💼 Client Frontend (`frontend` - Next.js)
 
 * Next.js-based client-facing frontend
 * Client registration and authentication
@@ -70,9 +70,9 @@ This universal crypto solution includes user management, admin and client dashbo
 
 ```bash
 root/
-├── qacent-backend/
-├── qacent-admin-panel/
-└── qacent-frontend/
+├── backend/
+├── admin-panel/
+└── frontend/
 ```
 
 Each project contains its own `README.md` for project-specific setup instructions.
