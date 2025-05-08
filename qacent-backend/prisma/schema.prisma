@@ -1,0 +1,217 @@
+// prisma/base.prisma
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")  // Make sure DATABASE_URL is set in .env
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+// Models
+
+model Balance {
+  id               BigInt   @id @default(autoincrement())
+  uid              String   @unique
+  transaction_id   String   @db.VarChar(255)
+  charge_amount    Decimal  @default(0.00) @db.Decimal(8, 2)
+  fee_type         String? // WIRE, ACH
+  fee_amount       String?
+  amount           Decimal  @db.Decimal(20, 2)
+  after_fee_amount Decimal  @db.Decimal(20, 2)
+  after_balance    Decimal  @db.Decimal(20, 2)
+  transaction_type String? // DEPOSIT, WITHDRAW
+  note             String?  @db.Text
+  to_currency_id   BigInt?
+  to_network_id    BigInt?
+  form_currency_id BigInt?
+  form_network_id  BigInt?
+  user_network_id  BigInt?
+  user_id          BigInt
+  status           String?  @default("PENDING")
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now()) @updatedAt
+
+  // Relations
+  user          User         @relation(fields: [user_id], references: [id])
+  to_currency   Currency?    @relation("ToCurrency", fields: [to_currency_id], references: [id])
+  to_network    Network?     @relation("ToNetwork", fields: [to_network_id], references: [id])
+  form_currency Currency?    @relation("FormCurrency", fields: [form_currency_id], references: [id])
+  form_network  Network?     @relation("FormNetwork", fields: [form_network_id], references: [id])
+  user_network  UserNetwork? @relation(fields: [user_network_id], references: [id])
+
+  @@map("balances")
+}
+
+model Bank {
+  id              BigInt   @id @default(autoincrement())
+  name            String   @db.VarChar(255)
+  address         String?  @db.Text
+  description     String?  @db.Text
+  account_type    String?  @db.VarChar(255)
+  currency_id     BigInt?
+  ach_routing_no  String?  @db.VarChar(255)
+  wire_routing_no String?  @db.VarChar(255)
+  sort_code       String?  @db.VarChar(255)
+  swift_code      String?  @db.VarChar(255)
+  status          String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  // Relations
+  bankAccounts BankAccount[]
+  currency     Currency?     @relation(fields: [currency_id], references: [id])
+
+  @@map("banks")
+}
+
+model BankAccount {
+    id               BigInt   @id @default(autoincrement())
+    user_id          BigInt?
+    bank_id          BigInt
+    routing_no       String? @db.VarChar(255)
+    account_number   String? @db.VarChar(255)
+    is_open          Boolean @default(true)
+    created_at       DateTime @default(now())
+    updated_at       DateTime @default(now()) @updatedAt
+
+    // Relations
+    user User? @relation(fields: [user_id], references: [id])
+    bank Bank  @relation(fields: [bank_id], references: [id])
+
+    @@unique([user_id])
+    @@map("bank_accounts")
+}
+
+model Content {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  description String?   @db.Text
+  status      String   @default("ACTIVE") // ACTIVE, FROZEN
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  @@map("contents")
+}
+
+model Country {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  code        String?
+  order_index Int?
+  status      String   @default("ACTIVE") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  // Relations
+  users User[]
+
+  @@map("countries")
+}
+
+model Currency {
+  id         BigInt   @id @default(autoincrement())
+  name       String
+  code       String?
+  image      String?
+  usd_rate   Decimal  @default(0.00) @db.Decimal(20, 2)
+  order      Int?
+  status     String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  // Relations
+  networks     Network[]
+  userNetworks UserNetwork[]
+  Banks        Bank[]
+  toBalances   Balance[]     @relation("ToCurrency")
+  formBalances Balance[]     @relation("FormCurrency")
+
+  @@map("currencies")
+}
+
+model Network {
+  id                 BigInt   @id @default(autoincrement())
+  name               String
+  code               String?
+  image              String?
+  currency_id        BigInt
+  order              Int?
+  enable_extra_field Boolean  @default(false)
+  status             String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now()) @updatedAt
+
+  // Relations
+  currency     Currency      @relation(fields: [currency_id], references: [id])
+  userNetworks UserNetwork[]
+  toBalances   Balance[]     @relation("ToNetwork")
+  formBalances Balance[]     @relation("FormNetwork")
+
+  @@map("networks")
+}
+
+model TransactionFee {
+  id           BigInt   @id @default(autoincrement())
+  fee_type     String?
+  fee          Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+
+  @@map("transaction_fees")
+}
+
+model User {
+  id                  BigInt   @id @default(autoincrement())
+  full_name           String
+  email               String   @unique
+  password            String
+  country_id          BigInt?
+  photo               String?
+  phone               String?
+  id_number              String?
+  code                String?
+  dob                 String?
+  address             String?
+  verification_image1 String?
+  verification_image2 String?
+  verification_type   String?
+  referral_code       String?
+  balance             Decimal  @default(0.00) @db.Decimal(20, 2)
+  status              String   @default("PENDING")
+  role                String   @default("USER")
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now()) @updatedAt
+
+  // Relations
+  country      Country?      @relation(fields: [country_id], references: [id])
+  bankAccounts BankAccount?
+  balances     Balance[]
+  userNetworks UserNetwork[]
+
+  @@map("users")
+}
+
+
+model UserNetwork {
+  id              BigInt   @id @default(autoincrement())
+  user_id         BigInt
+  currency_id     BigInt
+  network_id      BigInt
+  name            String?
+  network_address String?
+  link            String?
+  status_user     String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  status_admin    String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [user_id], references: [id])
+  currency Currency  @relation(fields: [currency_id], references: [id])
+  network  Network   @relation(fields: [network_id], references: [id])
+  balances Balance[]
+
+  @@map("user_networks")
+}

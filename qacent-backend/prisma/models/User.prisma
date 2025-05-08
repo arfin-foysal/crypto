@@ -1,0 +1,31 @@
+model User {
+  id                  BigInt   @id @default(autoincrement())
+  full_name           String
+  email               String   @unique
+  password            String
+  country_id          BigInt?
+  photo               String?
+  phone               String?
+  id_number              String?
+  code                String?
+  dob                 String?
+  address             String?
+  verification_image1 String?
+  verification_image2 String?
+  verification_type   String?
+  referral_code       String?
+  balance             Decimal  @default(0.00) @db.Decimal(20, 2)
+  status              String   @default("PENDING")
+  role                String   @default("USER")
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now()) @updatedAt
+
+  // Relations
+  country      Country?      @relation(fields: [country_id], references: [id])
+  bankAccounts BankAccount?
+  balances     Balance[]
+  userNetworks UserNetwork[]
+
+  @@map("users")
+}
+

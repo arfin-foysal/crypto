@@ -1,0 +1,32 @@
+model Balance {
+  id               BigInt   @id @default(autoincrement())
+  uid              String   @unique
+  transaction_id   String   @db.VarChar(255)
+  charge_amount    Decimal  @default(0.00) @db.Decimal(8, 2)
+  fee_type         String? // WIRE, ACH
+  fee_amount       String?
+  amount           Decimal  @db.Decimal(20, 2)
+  after_fee_amount Decimal  @db.Decimal(20, 2)
+  after_balance    Decimal  @db.Decimal(20, 2)
+  transaction_type String? // DEPOSIT, WITHDRAW
+  note             String?  @db.Text
+  to_currency_id   BigInt?
+  to_network_id    BigInt?
+  form_currency_id BigInt?
+  form_network_id  BigInt?
+  user_network_id  BigInt?
+  user_id          BigInt
+  status           String?  @default("PENDING")
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now()) @updatedAt
+
+  // Relations
+  user          User         @relation(fields: [user_id], references: [id])
+  to_currency   Currency?    @relation("ToCurrency", fields: [to_currency_id], references: [id])
+  to_network    Network?     @relation("ToNetwork", fields: [to_network_id], references: [id])
+  form_currency Currency?    @relation("FormCurrency", fields: [form_currency_id], references: [id])
+  form_network  Network?     @relation("FormNetwork", fields: [form_network_id], references: [id])
+  user_network  UserNetwork? @relation(fields: [user_network_id], references: [id])
+
+  @@map("balances")
+}

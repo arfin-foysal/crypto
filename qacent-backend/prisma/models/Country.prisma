@@ -1,0 +1,14 @@
+model Country {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  code        String?
+  order_index Int?
+  status      String   @default("ACTIVE") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  // Relations
+  users User[]
+
+  @@map("countries")
+}

@@ -1,0 +1,21 @@
+model UserNetwork {
+  id              BigInt   @id @default(autoincrement())
+  user_id         BigInt
+  currency_id     BigInt
+  network_id      BigInt
+  name            String?
+  network_address String?
+  link            String?
+  status_user     String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  status_admin    String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  // Relations
+  user     User      @relation(fields: [user_id], references: [id])
+  currency Currency  @relation(fields: [currency_id], references: [id])
+  network  Network   @relation(fields: [network_id], references: [id])
+  balances Balance[]
+
+  @@map("user_networks")
+}

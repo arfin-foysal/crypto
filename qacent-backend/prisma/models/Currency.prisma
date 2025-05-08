@@ -1,0 +1,20 @@
+model Currency {
+  id         BigInt   @id @default(autoincrement())
+  name       String
+  code       String?
+  image      String?
+  usd_rate   Decimal  @default(0.00) @db.Decimal(20, 2)
+  order      Int?
+  status     String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  // Relations
+  networks     Network[]
+  userNetworks UserNetwork[]
+  Banks        Bank[]
+  toBalances   Balance[]     @relation("ToCurrency")
+  formBalances Balance[]     @relation("FormCurrency")
+
+  @@map("currencies")
+}

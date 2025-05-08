@@ -1,0 +1,21 @@
+model Bank {
+  id              BigInt   @id @default(autoincrement())
+  name            String   @db.VarChar(255)
+  address         String?  @db.Text
+  description     String?  @db.Text
+  account_type    String?  @db.VarChar(255)
+  currency_id     BigInt?
+  ach_routing_no  String?  @db.VarChar(255)
+  wire_routing_no String?  @db.VarChar(255)
+  sort_code       String?  @db.VarChar(255)
+  swift_code      String?  @db.VarChar(255)
+  status          String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  // Relations
+  bankAccounts BankAccount[]
+  currency     Currency?     @relation(fields: [currency_id], references: [id])
+
+  @@map("banks")
+}

@@ -1,0 +1,20 @@
+model Network {
+  id                 BigInt   @id @default(autoincrement())
+  name               String
+  code               String?
+  image              String?
+  currency_id        BigInt
+  order              Int?
+  enable_extra_field Boolean  @default(false)
+  status             String   @default("PENDING") // PENDING, ACTIVE, FROZEN, SUSPENDED
+  created_at         DateTime @default(now())
+  updated_at         DateTime @default(now()) @updatedAt
+
+  // Relations
+  currency     Currency      @relation(fields: [currency_id], references: [id])
+  userNetworks UserNetwork[]
+  toBalances   Balance[]     @relation("ToNetwork")
+  formBalances Balance[]     @relation("FormNetwork")
+
+  @@map("networks")
+}

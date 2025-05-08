@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qacent Notification</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e2e2e2;
+            color: #e2e2e2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0;
+        }
+        .email-card {
+            background-color: #1a1a24;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.5;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+        .greeting {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #e2e2e2;
+        }
+        .message {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #e2e2e2;
+        }
+        .action-link {
+            display: inline-block;
+            color: #4cc9f0;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .action-link:hover {
+            text-decoration: underline;
+        }
+        .signature {
+            margin-top: 25px;
+            color: #e2e2e2;
+        }
+        .footer {
+            background-color: #15151e;
+            padding: 20px 30px;
+            font-size: 14px;
+            color: #8a8a9a;
+        }
+        .footer a {
+            color: #4cc9f0;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-card">
+            <div class="content">
+                <div class="logo">
+                    <img src="cid:logo" alt="Qacent Logo">
+                </div>
+                <div class="greeting">
+                    Hi {{userName}},
+                </div>
+                <div class="message">
+                    {{message}}
+                </div>
+                <a href="{{actionUrl}}" class="action-link">{{actionText}}</a>
+                <div class="signature">
+                    The Qacent team
+                </div>
+            </div>
+            <div class="footer">
+                If you have any questions or need help, feel free to contact us at
+                <a href="mailto:help@qacent.com">help@qacent.com</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

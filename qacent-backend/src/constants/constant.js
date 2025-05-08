@@ -1,0 +1,46 @@
+const STATUS = {
+  PENDING: "PENDING",
+  ACTIVE: "ACTIVE",
+  FROZEN: "FROZEN",
+  SUSPENDED: "SUSPENDED",
+};
+
+const ROLES = {
+  SYSTEMADMIN: "SYSYTEMADMIN",
+  SUPERADMIN: "SUPERADMIN",
+  ADMIN: "ADMIN",
+  USER: "USER",
+};
+
+const TRANSACTION_STATUS = {
+  PENDING: "PENDING",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+  REFUND: "REFUND",
+  IN_REVIEW: "IN_REVIEW",
+};
+
+const TRANSACTION_TYPES = {
+  DEPOSIT: "DEPOSIT",
+  WITHDRAW: "WITHDRAW",
+};
+
+const TFEE_TYPES = {
+  DEPOSIT: "DEPOSIT",
+  WITHDRAW: "WITHDRAW",
+};
+
+// Freeze objects to prevent modifications
+Object.freeze(STATUS);
+Object.freeze(ROLES);
+Object.freeze(TRANSACTION_STATUS);
+Object.freeze(TRANSACTION_TYPES);
+Object.freeze(TFEE_TYPES);
+
+module.exports = {
+  STATUS,
+  ROLES,
+  TRANSACTION_STATUS,
+  TRANSACTION_TYPES,
+  TFEE_TYPES,
+};

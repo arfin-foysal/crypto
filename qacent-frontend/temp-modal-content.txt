@@ -1,0 +1,2 @@
+                        Your withdrawal request has been successfully submitted.
+                        You can track the status of your withdrawal in the Transactions section.
